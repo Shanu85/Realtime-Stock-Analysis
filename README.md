@@ -1,2 +1,2 @@
 # Realtime-Stock-Analysis
-Realtime data pipeline to analyse the stocks
+Realtime data pipeline to analyse the stocks using kafka 
