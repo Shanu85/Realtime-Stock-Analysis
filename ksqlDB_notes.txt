@@ -1,0 +1,112 @@
+KSQL Notes
+    KSQL Tables vs KSQL Stream
+
+        KSQL Stream
+            1. Stream grows with each record addition, it behaves same as underlying Kafka Topic
+            2. Unbounded and Append Only
+            Example => Orders in an online store
+
+        KSQL Tables
+            1. Stores latest value for a given key. Key is required in order to have a table
+            2. Table only grow with new key addition
+            Example => Inventory of an online store
+
+
+    Pull and Push Query
+
+        Pull Query
+            1. return the current state to the client, and then terminate
+            2. they are much more akin to a SELECT statement executed on a regular RDBMS
+            3. can only be used against ksqlDB tables
+
+        Push Query
+            1. identified by the EMIT CHANGES clause
+            2. Using push query, the client will receive a message for every change that occurs on the stream (that is, every new message)
+
+
+
+KSQL Query
+
+        CREATE STREAM stocks(
+          symbol varchar key,
+          shortName varchar,
+          volume integer,
+          averageVolume integer,
+          open double,
+          dayHigh double,
+          dayLow double,
+          sector varchar,
+          currentPrice varchar,
+          previousClose double,
+          exchange varchar,
+          quoteType varchar,
+          datatime varchar
+        ) with
+        (kafka_topic='stocks_data',
+        partitions=1,
+        value_format='json');
+
+        create table stock_volume_price_analysis with (kafka_topic='stock_volume_price') as
+        select
+            symbol,
+            latest_by_offset(volume,2)[1] as prev_volume,
+            latest_by_offset(volume,2)[2] as curr_volume,
+            latest_by_offset(currentPrice,2)[1] as prev_price,
+            latest_by_offset(currentPrice,2)[2] as curr_price,
+            latest_by_offset(datatime,2)[1] as prev_time,
+            latest_by_offset(datatime,2)[2] as curr_time,
+            latest_by_offset(averageVolume,2)[1] as averageVolume,
+            latest_by_offset(sector,2)[1] as sector,
+            latest_by_offset(open,2)[1] as open,
+            latest_by_offset(shortName,2)[1] as shortName,
+            latest_by_offset(exchange,2)[1] as exchange
+            from stocks
+            GROUP by symbol;
+
+
+        create table stock_signal_tbl with(kafka_topic='stock_signal') as
+        select symbol,curr_price,curr_volume,averageVolume,sector,open,shortName,exchange,
+        case when averageVolume < curr_volume and cast(curr_price as double)+0.03*cast(curr_price as double)<cast(prev_price as double) then 'sell'
+        when averageVolume < curr_volume and cast(curr_price as double)>cast(prev_price as double)+0.03*cast(prev_price as double) then 'buy'
+        end as signal
+        from stock_volume_price_analysis
+        where (averageVolume < curr_volume and curr_price<prev_price) or (averageVolume < curr_volume and curr_price>prev_price);
+
+
+        create table telegram_output_stream with(kafka_topic='telegram_output_stream',partitions=1,value_format='avro') as
+        select symbol,'' as `chat_id`,
+        concat('You can ',signal,' the stock, having symbol ',symbol, ' , current-price: ',cast(curr_price as string),
+        ' current-volume: ',cast(curr_volume as string), ', opened today with a price of: ',cast(open as string), '. Stock is listed on ',exchange) as `text`
+        from stock_signal_tbl where signal in ('buy','sell');
+
+        create table telegram_output_stream
+        (
+            `symbol` varchar key,
+            `chat_id` varchar,
+            `text` varchar
+        )
+        with(kafka_topic='telegram_output_stream',partitions=1,value_format='avro');
+
+
+''''
+strategy (hourly checking using DAG)
+    1. Volume should be more than averageVolume
+    2. If price drops more than 3% -> sell signal
+    3. If price increase more than 3% -> buy signal
+'''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
