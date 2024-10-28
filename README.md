@@ -26,7 +26,9 @@ This project leverages the power of Apache Airflow, Confluent Kafka, ksqlDB, and
 
 * **Telegram Bot:** Delivers real-time alerts to users via Telegram, providing information about the stock symbol, current price, and percentage change.
 
-  <img height="500" width="1275" alt="SCR-20241023-neuc" src="https://github.com/user-attachments/assets/fe93ca72-26fd-41ec-ab7b-3f833aad0b20">
+<p align="center">
+  <img width="300" alt="SCR-20241023-neuc" src="https://github.com/user-attachments/assets/41675f03-1eee-4acc-88ef-27865a467765">
+</p>
 
 
 # Data Flow Diagram (DFD)
