@@ -34,3 +34,18 @@ This project leverages the power of Apache Airflow, Confluent Kafka, ksqlDB, and
 # Data Flow Diagram (DFD)
 
 ![dfd](https://github.com/user-attachments/assets/79b4959c-f0a6-452c-b873-0f479c0bd04b)
+
+# 🧰 Installation
+
+0. Clone this repository
+1. Create a virtual enviroment and install all the packages (```kafka-python,apache-airflow,yfinance,pandas```).
+2. Create a updated requirements.txt file (```pip3 freeze > requirements.txt```)
+3. Start Docker (```docker-compose up -d```)
+
+# 🛠 Testing
+
+0. Open airflow (localhost:8080) and trigger the DAG
+1. Monitor whether we are getting data into kafka or not using control-center(localhost:9021)
+2. 
+
+
