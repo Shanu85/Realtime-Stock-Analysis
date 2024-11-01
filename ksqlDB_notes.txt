@@ -74,7 +74,7 @@ KSQL Query
 
 
         create table telegram_output_stream with(kafka_topic='telegram_output_stream',partitions=1,value_format='avro') as
-        select symbol,'' as `chat_id`,
+        select symbol,'{put chatID we got from telegram Bot}' as `chat_id`,
         concat('You can ',signal,' the stock, having symbol ',symbol, ' , current-price: ',cast(curr_price as string),
         ' current-volume: ',cast(curr_volume as string), ', opened today with a price of: ',cast(open as string), '. Stock is listed on ',exchange) as `text`
         from stock_signal_tbl where signal in ('buy','sell');
