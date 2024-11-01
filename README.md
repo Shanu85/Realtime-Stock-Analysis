@@ -1,5 +1,5 @@
 # Realtime-Stock-Analysis
-This project leverages the power of Apache Airflow, Confluent Kafka, ksqlDB, and a Telegram bot to create a robust real-time stock alert system. The system is designed to monitor stocks from Yahoo Finance, identify significant price movements and volume surges, and deliver timely alerts to users via Telegram.
+This project leverages the power of Apache Airflow, Confluent Kafka, ksqlDB, and a Telegram bot to create a robust real-time stock alert system. The system is designed to monitor **top 500 NSE stocks** from Yahoo Finance, identify significant price movements and volume surges, and deliver timely alerts to users via Telegram.
 
 ## Key Components:
 
