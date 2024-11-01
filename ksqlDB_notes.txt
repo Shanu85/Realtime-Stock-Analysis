@@ -88,6 +88,26 @@ KSQL Query
         with(kafka_topic='telegram_output_stream',partitions=1,value_format='avro');
 
 
+Telegram Sink Connector Configuration :
+
+    {
+          "name": "Stock-Analysis-Bot",
+          "config": {
+            "name": "Name",
+            "connector.class": "io.confluent.connect.http.HttpSinkConnector",
+            "topics": "telegram_output_stream",
+            "http.api.url": "https://api.telegram.org/bot{token to access the HTTP API}/sendMessage",
+            "request.method": "post",
+            "headers": "Content-Type:application/json",
+            "request.body.format": "json",
+            "batch.json.as.array": "false",
+            "reporter.result.topic.replication.factor": "1",
+            "reporter.error.topic.replication.factor": "1",
+            "reporter.bootstrap.servers": "broker:29092"
+          }
+        }
+
+
 ''''
 strategy (hourly checking using DAG)
     1. Volume should be more than averageVolume
