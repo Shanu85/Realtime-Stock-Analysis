@@ -13,6 +13,7 @@ This project leverages the power of Apache Airflow, Confluent Kafka, ksqlDB, and
     
   *  **Confluent Kafka**: 
           Receives and stores the ingested data in a reliable and scalable manner.
+
 ### 2. Data Processing:
 
 * **ksqlDB:**
@@ -35,6 +36,7 @@ This project leverages the power of Apache Airflow, Confluent Kafka, ksqlDB, and
 
 ![dfd](https://github.com/user-attachments/assets/79b4959c-f0a6-452c-b873-0f479c0bd04b)
 
+
 # 🧰 Installation
 
 0. Clone this repository
@@ -44,8 +46,39 @@ This project leverages the power of Apache Airflow, Confluent Kafka, ksqlDB, and
 
 # 🛠 Testing
 
-0. Open airflow (localhost:8080) and trigger the DAG
-1. Monitor whether we are getting data into kafka or not using control-center(localhost:9021)
-2. 
+0. **Open Airflow**
+
+   * Navigate to localhost:8080 and trigger the desired DAG.
+
+2. **Monitor Kafka Data**
+
+   * Use the Control Center at localhost:9021 to check if data is flowing into Kafka.
+   
+3. **Create KSQLDB Streams and Tables**
+
+   * Refer to ksqlDB_notes.txt for instructions on creating the necessary streams and tables.
+   
+4. **Set Up a Telegram Bot**
+
+   * Create a new bot using BotFather on Telegram.
+   * Obtain the token needed to access the HTTP API.
+   
+5. **Retrieve Chat ID**
+    * Use the following URL to get your chat ID (paste in web browser)
+      
+        ``` https://api.telegram.org/bot{Access Token}/getMe ```
+      
+6. **Create Kafka HTTP Sink Connector**
+
+    * Use the configurations specified in ksqlDB_notes.txt to set up the Kafka HTTP sink connector.
+    
+7. **Check Data Flow**
+
+    * Wait for the next DAG trigger.
+    * Verify that data is being sent to the Kafka topic telegram_output_stream and is visible in your Telegram bot.
+
+
+
+Thanks for reading 😁😁😁 !!!
 
 
